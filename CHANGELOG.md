@@ -3,6 +3,14 @@
 Sve značajne promjene idu ovdje. Format: [Keep a Changelog](https://keepachangelog.com/),
 verzije po [SemVer](https://semver.org/).
 
+## [0.1.2] - 2026-11-24
+
+### Fixed
+
+- `manifest.json` ključevi su poredani kako hassfest traži (`domain`, `name`,
+  pa abecedno), pa validacija prolazi. Build skripta sada odbija napraviti zip
+  s pogrešnim poretkom.
+
 ## [0.1.1] - 2026-11-24
 
 ### Fixed

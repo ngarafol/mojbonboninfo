@@ -24,7 +24,11 @@ SKIP = {"__pycache__", ".DS_Store"}
 
 
 def main() -> int:
-    version = json.loads((COMPONENT / "manifest.json").read_text())["version"]
+    manifest = json.loads((COMPONENT / "manifest.json").read_text())
+    expected = ["domain", "name", *sorted(k for k in manifest if k not in ("domain", "name"))]
+    if list(manifest) != expected:
+        raise SystemExit(f"manifest.json keys must be domain, name, then alphabetical: {list(manifest)}")
+    version = manifest["version"]
     files = [
         path
         for path in sorted(COMPONENT.rglob("*"))
