@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Poveži bonbon",
+        "description": "bonbon prijava ide preko Hrvatskog Telekoma (Google, Apple, ...), pa Home Assistant preuzima sesiju koju tvoj preglednik već ima.\n\n1. Prijavi se na {portal_url} i otvori **Moj bonbon**\n2. Otvori Developer tools (F12) → **Network** i filtriraj `api4`\n3. Desni klik na bilo koji zahtjev na `api4.bonbon.hr` → **Copy** → **Copy as cURL**\n4. Zalijepi ovdje\n\nSesija se sprema lokalno i obnavlja u pozadini. Kad istekne, dobit ćeš obavijest da zalijepiš novu.",
+        "data": {
+          "curl": "Kopirani zahtjev (cURL)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "bonbon sesija je istekla",
+        "description": "Sesija koju je Home Assistant koristio više nije valjana. Prijavi se ponovno na {portal_url}, pa kopiraj zahtjev na `api4.bonbon.hr`:\n\nDeveloper tools (F12) → **Network** → filtriraj `api4` → desni klik na zahtjev → **Copy** → **Copy as cURL**.",
+        "data": {
+          "curl": "Kopirani zahtjev (cURL)"
+        }
+      }
+    },
+    "error": {
+      "invalid_session": "Ovo ne izgleda kao kopirani zahtjev s api4.bonbon.hr. U DevToolsima filtriraj `api4` i kopiraj jedan od tih zahtjeva.",
+      "invalid_auth": "Portal je odbio ovu sesiju. Prijavi se ponovno u pregledniku i kopiraj svježi zahtjev.",
+      "cannot_connect": "bonbon.hr nije dostupan. Provjeri vezu i pokušaj ponovno.",
+      "unknown": "Neočekivan odgovor portala. Pogledaj log Home Assistenta."
+    },
+    "abort": {
+      "already_configured": "Ovaj bonbon račun je već dodan.",
+      "reauth_successful": "bonbon sesija je obnovljena."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "bonbon opcije",
+        "description": "Koliko često osvježavati portal i koje brojeve sakriti.",
+        "data": {
+          "scan_interval_hours": "Interval osvježavanja (sati)",
+          "excluded_numbers": "Skriveni brojevi"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "number": {
+        "name": "Broj"
+      },
+      "balance": {
+        "name": "Stanje računa"
+      },
+      "validity": {
+        "name": "Valjanost računa"
+      },
+      "packages": {
+        "name": "Aktivni paketi"
+      },
+      "data": {
+        "name": "Preostalo podataka"
+      },
+      "minutes": {
+        "name": "Preostalo minuta"
+      },
+      "sms": {
+        "name": "Preostalo SMS-a"
+      }
+    }
+  }
+}

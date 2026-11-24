@@ -1,0 +1,14 @@
+{
+  "domain": "bonbon",
+  "name": "Bonbon",
+  "codeowners": ["@ngarafol"],
+  "config_flow": true,
+  "dependencies": ["frontend", "http"],
+  "documentation": "https://github.com/ngarafol/mojbonboninfo",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/ngarafol/mojbonboninfo/issues",
+  "loggers": ["custom_components.bonbon"],
+  "requirements": [],
+  "version": "0.1.0"
+}

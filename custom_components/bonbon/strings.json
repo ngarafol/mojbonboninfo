@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Bonbon",
+        "description": "Bonbon signs in through Hrvatski Telekom SSO (Google, Apple, ...), so Home Assistant replays the session your browser already has.\n\n1. Sign in at {portal_url} and open **Moj bonbon**\n2. Open Developer tools (F12) → **Network** and filter `api4`\n3. Right-click any `api4.bonbon.hr` request → **Copy** → **Copy as cURL**\n4. Paste it below\n\nThe session is stored locally and renewed in the background. When it finally expires you will get a notification asking for a fresh one.",
+        "data": {
+          "curl": "Copied request (cURL)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Bonbon session expired",
+        "description": "The session Home Assistant was using is no longer valid. Sign in at {portal_url} again, then copy an `api4.bonbon.hr` request:\n\nDeveloper tools (F12) → **Network** → filter `api4` → right-click a request → **Copy** → **Copy as cURL**.",
+        "data": {
+          "curl": "Copied request (cURL)"
+        }
+      }
+    },
+    "error": {
+      "invalid_session": "That does not look like a copied api4.bonbon.hr request. In DevTools, filter `api4` and copy one of those requests.",
+      "invalid_auth": "The portal rejected this session. Sign in again in the browser and copy a fresh request.",
+      "cannot_connect": "Could not reach bonbon.hr. Check the connection and try again.",
+      "unknown": "Unexpected answer from the portal. Check the Home Assistant log."
+    },
+    "abort": {
+      "already_configured": "This Bonbon account is already set up.",
+      "reauth_successful": "Bonbon session renewed."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Bonbon options",
+        "description": "How often to poll the portal, and which numbers to hide.",
+        "data": {
+          "scan_interval_hours": "Refresh interval (hours)",
+          "excluded_numbers": "Hidden numbers"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "number": {
+        "name": "Phone number"
+      },
+      "balance": {
+        "name": "Account balance"
+      },
+      "validity": {
+        "name": "Valid until"
+      },
+      "packages": {
+        "name": "Active packages"
+      },
+      "data": {
+        "name": "Data left"
+      },
+      "minutes": {
+        "name": "Minutes left"
+      },
+      "sms": {
+        "name": "SMS left"
+      }
+    }
+  }
+}
