@@ -29,10 +29,26 @@ jobs:
           python3 scripts/build.py
           unzip -l bonbon.zip
 
+      - name: Take the notes from CHANGELOG.md
+        run: |
+          python3 - <<'EOF' > release-notes.md
+          import json, pathlib, re
+          version = json.loads(
+              pathlib.Path("custom_components/bonbon/manifest.json").read_text()
+          )["version"]
+          text = pathlib.Path("CHANGELOG.md").read_text()
+          match = re.search(
+              rf"^## \[{re.escape(version)}\].*?$(.*?)(?=^## |\Z)", text, re.M | re.S
+          )
+          print(match.group(1).strip() if match else f"Bonbon {version}")
+          EOF
+          head -5 release-notes.md
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
+          body_path: release-notes.md
           files: bonbon.zip
-          generate_release_notes: true
+          generate_release_notes: false
           prerelease: ${{ contains(github.ref_name, '-') }}
