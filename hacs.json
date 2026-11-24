@@ -1,0 +1,7 @@
+{
+  "name": "Bonbon",
+  "render_readme": true,
+  "homeassistant": "2026.11.0",
+  "zip_release": true,
+  "filename": "bonbon.zip"
+}

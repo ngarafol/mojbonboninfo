@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="hr">
+  <head>
+    <meta charset="utf-8" />
+    <title>bonbon-card preview</title>
+    <style>
+      :root { color-scheme: dark; }
+      body {
+        margin: 0;
+        padding: 32px;
+        background:
+          radial-gradient(900px 600px at 10% -10%, #241640 0%, transparent 60%),
+          radial-gradient(700px 500px at 110% 10%, #2a1030 0%, transparent 55%),
+          #0b0713;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        color: #f8f5ff;
+      }
+      h1 { font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: #a78bfa; margin: 0 0 4px; }
+      p.sub { margin: 0 0 24px; color: #8b8398; font-size: 13px; }
+      .grid { display: grid; grid-template-columns: repeat(2, 400px); gap: 24px; align-items: start; }
+      @media (max-width: 980px) { .grid { grid-template-columns: 400px; } }
+      .caption { font-size: 11px; color: #7c7490; margin: 8px 2px 0; letter-spacing: .04em; }
+    </style>
+  </head>
+  <body>
+    <h1>bonbon-card</h1>
+    <p class="sub">Lokalni preview s lažnim stanjima — ista kartica koju integracija servira u Home Assistantu.</p>
+
+    <div class="grid">
+      <div>
+        <bonbon-card id="single"></bonbon-card>
+        <div class="caption">jedan broj · stanje i valjanost</div>
+      </div>
+      <div>
+        <bonbon-card id="multi"></bonbon-card>
+        <div class="caption">dva broja · tabovi i paketi</div>
+      </div>
+      <div style="width:320px">
+        <bonbon-card id="compact"></bonbon-card>
+        <div class="caption">320 px · uski stupac</div>
+      </div>
+      <div>
+        <bonbon-card id="minimal"></bonbon-card>
+        <div class="caption">bez paketa i bez stanja</div>
+      </div>
+    </div>
+
+    <script>
+      // Minimal ha-icon stand-in so the card renders without the HA frontend.
+      const ICONS = {
+        "mdi:refresh":
+          '<path d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.73 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z"/>',
+        "mdi:calendar-check":
+          '<path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 16H5V8h14zM10 14.5 7.5 12 6 13.5l4 4 7-7L15.5 9z"/>',
+        "mdi:package-variant-closed":
+          '<path d="m21 16.5-9 5-9-5v-9l9-5 9 5zm-9-12L4.5 8.5 12 12.8l7.5-4.3zm8 4.9-7 4v8.2l7-4z"/>',
+        "mdi:sim-alert":
+          '<path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 5a6.5 6.5 0 0 1 0 7h-2a6.5 6.5 0 0 1 0-7zm-.5 1.5v4a4.5 4.5 0 0 0 0-4"/>',
+      };
+      if (!customElements.get("ha-icon")) {
+        customElements.define(
+          "ha-icon",
+          class extends HTMLElement {
+            connectedCallback() {
+              const icon = this.getAttribute("icon") || "";
+              const path = ICONS[icon] || ICONS["mdi:refresh"];
+              this.innerHTML = `<svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">${path}</svg>`;
+              this.style.display = "inline-flex";
+            }
+          }
+        );
+      }
+
+      const now = Date.now() / 1000;
+      const hass = {
+        locale: { language: "hr" },
+        states: {},
+        callService: async () => {},
+      };
+
+      function addNumber(entry, msisdn, label, balance, valid, packages, ago, extra = {}) {
+        hass.states[`sensor.bonbon_${msisdn.replace(/\D/g, "")}_broj`] = {
+          entity_id: `sensor.bonbon_${msisdn.replace(/\D/g, "")}_broj`,
+          state: msisdn,
+          last_updated: now - ago,
+          attributes: {
+            bonbon_number: msisdn,
+            bonbon_entry_id: entry,
+            bonbon: {
+              msisdn,
+              label,
+              balance,
+              currency: "EUR",
+              valid_until: valid,
+              packages,
+              spending: extra.spending ?? null,
+              postpaid: extra.postpaid ?? false,
+              portal_message: extra.portal_message ?? null,
+            },
+          },
+        };
+      }
+
+      addNumber("e1", "+385911234567", null, 12.34, "2026-12-01", [
+        { name: "Internet 30 GB", remaining: 21.4, total: 30, unit: "GB", expires: "2026-12-01", auto_renew: true },
+        { name: "Minute prema svima", remaining: 240, total: 300, unit: "min", expires: "2026-12-01", auto_renew: true },
+      ], 640);
+
+      addNumber("e2", "+385929876543", "Marko", 3.05, "2026-11-27", [
+        { name: "Internet 5 GB", remaining: 0.8, total: 5, unit: "GB", expires: "2026-11-27", auto_renew: false },
+        { name: "SMS paket", remaining: 50, total: 50, unit: "SMS", expires: "2026-11-27", auto_renew: false },
+      ], 8200);
+      addNumber("e2", "+385959111222", "Ivana", null, null, [], 120, {
+        spending: 0,
+        portal_message:
+          "Ovaj broj u ovom trenutku nije moguće administrirati.",
+      });
+
+      customElements.whenDefined("bonbon-card").then(() => {
+        const single = document.getElementById("single");
+        single.setConfig({ entry_id: "e1" });
+        single.hass = hass;
+
+        const multi = document.getElementById("multi");
+        multi.setConfig({ entry_id: "e2" });
+        multi.hass = hass;
+
+        const compact = document.getElementById("compact");
+        compact.setConfig({ entry_id: "e1" });
+        compact.hass = hass;
+
+        const minimal = document.getElementById("minimal");
+        minimal.setConfig({ entity: "sensor.bonbon_385959111222_broj" });
+        minimal.hass = hass;
+      });
+    </script>
+
+    <script src="../custom_components/bonbon/frontend/bonbon-card.js"></script>
+  </body>
+</html>
