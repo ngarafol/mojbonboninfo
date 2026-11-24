@@ -14,9 +14,10 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.storage import Store
+from homeassistant.loader import async_get_integration
 
 from .api import BonbonAPI
-from .const import CARD_FILENAME, CARD_URL, CONF_SESSION, DOMAIN, VERSION
+from .const import CARD_FILENAME, CARD_URL, CONF_SESSION, DOMAIN
 from .coordinator import STORAGE_VERSION, BonbonCoordinator
 from .session_import import PortalSession
 
@@ -79,5 +80,6 @@ async def _async_register_card(hass: HomeAssistant) -> None:
             )
         ]
     )
-    add_extra_js_url(hass, f"{CARD_URL}?v={VERSION}")
+    integration = await async_get_integration(hass, DOMAIN)
+    add_extra_js_url(hass, f"{CARD_URL}?v={integration.version}")
     _LOGGER.debug("Registered Bonbon card at %s", CARD_URL)

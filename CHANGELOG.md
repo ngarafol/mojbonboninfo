@@ -3,6 +3,18 @@
 Sve značajne promjene idu ovdje. Format: [Keep a Changelog](https://keepachangelog.com/),
 verzije po [SemVer](https://semver.org/).
 
+## [0.1.1] - 2026-11-24
+
+### Fixed
+
+- **Layout release zipa.** HACS raspakirava release asset direktno u
+  `custom_components/<domena>`, pa zip sada sadrži `manifest.json` u korijenu
+  umjesto ugniježđene `custom_components/` mape. 0.1.0 instaliran preko HACS-a
+  završio je kao `custom_components/bonbon/custom_components/bonbon/manifest.json`,
+  što Home Assistant prijavljuje kao integraciju bez manifesta.
+- Verzija za cache-busting kartice čita se iz `manifest.json` umjesto iz druge
+  hardkodirane konstante.
+
 ## [0.1.0] - 2026-11-24
 
 ### Added

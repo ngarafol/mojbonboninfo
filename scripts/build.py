@@ -1,9 +1,13 @@
-"""Build the HACS release archive: bonbon.zip with custom_components/bonbon.
+"""Build the HACS release archive: the integration's files at the zip root.
 
     python3 scripts/build.py
 
-The archive root is `custom_components/`, so unzipping it into /config is
-exactly what HACS does and what a manual install needs.
+HACS extracts a release asset straight into
+`<config>/custom_components/<domain>`, so the archive must contain
+`manifest.json` at its root - not a `custom_components/` folder. The manual
+install path is therefore the same directory:
+
+    unzip bonbon.zip -d /config/custom_components/bonbon
 """
 
 from __future__ import annotations
@@ -28,7 +32,14 @@ def main() -> int:
     ]
     with zipfile.ZipFile(OUTPUT, "w", zipfile.ZIP_DEFLATED) as archive:
         for path in files:
-            archive.write(path, path.relative_to(ROOT))
+            archive.write(path, path.relative_to(COMPONENT))
+
+    names = zipfile.ZipFile(OUTPUT).namelist()
+    if "manifest.json" not in names or any(
+        name.startswith("custom_components/") for name in names
+    ):
+        raise SystemExit("bonbon.zip must have manifest.json at its root")
+
     print(f"bonbon.zip  v{version}  {len(files)} files  {OUTPUT.stat().st_size} B")
     return 0
 

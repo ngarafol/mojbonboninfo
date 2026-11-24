@@ -7,7 +7,6 @@ from typing import Final
 
 DOMAIN: Final = "bonbon"
 MANUFACTURER: Final = "bonbon"
-VERSION: Final = "0.1.0"
 
 # Polling. The portal data changes slowly and bonbon's own app refreshes on
 # demand, so a few hours is plenty and keeps the SSO session alive.

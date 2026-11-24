@@ -42,8 +42,19 @@ YAMLu.
 ### Ručno
 
 1. Skini `bonbon.zip` sa [zadnjeg releasea](https://github.com/ngarafol/mojbonboninfo/releases)
-2. Raspakiraj u `/config` (dobiješ `/config/custom_components/bonbon/...`)
+2. Raspakiraj **u mapu integracije**:
+
+   ```bash
+   mkdir -p /config/custom_components/bonbon
+   unzip bonbon.zip -d /config/custom_components/bonbon
+   ```
+
 3. Restartaj Home Assistant
+
+Zip ima `manifest.json` u korijenu jer HACS raspakirava asset točno u
+`custom_components/bonbon` — provjeri da si dobio
+`/config/custom_components/bonbon/manifest.json` (ne još jedan
+`custom_components` unutra).
 
 ## Postavljanje
 
