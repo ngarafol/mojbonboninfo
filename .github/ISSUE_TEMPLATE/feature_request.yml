@@ -1,0 +1,11 @@
+name: Feature request
+description: Ideja ili poboljšanje
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Ideja
+      description: Što bi trebalo postojati i zašto. Ako je vezano uz portal, napiši koji podatak vidiš na Moj bonbon.
+    validations:
+      required: true

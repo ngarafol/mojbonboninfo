@@ -1,0 +1,39 @@
+name: Bug report
+description: Nešto ne radi kako treba
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prije prijave: uključi debug log (`custom_components.bonbon: debug`) i
+        provjeri da si na zadnjem releaseu. **Nikad ne lijepi cookieje ni
+        cijeli cURL** — sadrže tvoju sesiju.
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant verzija
+      placeholder: "2026.11.0"
+    validations:
+      required: true
+  - type: input
+    id: integration-version
+    attributes:
+      label: Verzija integracije
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Što se događa
+      description: Što si očekivao, što se dogodilo, koraci za reprodukciju.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log
+      description: Očisti cookieje i osobne podatke prije lijepljenja.
+      render: text
+    validations:
+      required: false

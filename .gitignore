@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.DS_Store
+bonbon.zip
+.idea/
+.vscode/
+
+# local dev tooling
+.pylibs/
+.browsers/
+.halibs/
+preview.png
+.dev/
+.har/
+.deploy/

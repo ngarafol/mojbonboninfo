@@ -1,0 +1,68 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hassfest:
+    name: hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration
+
+  checks:
+    name: lint, card, tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install ruff
+      - run: ruff check custom_components tests scripts conftest.py
+      - run: node --check custom_components/bonbon/frontend/bonbon-card.js
+      - run: python tests/run.py
+
+  ha-tests:
+    name: HA tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      # Pins the core version it supports; the job below checks 2026.11 itself.
+      - run: pip install pytest-homeassistant-custom-component home-assistant-frontend
+      - run: pytest -q
+
+  ha-2026-11:
+    name: import on HA 2026.11
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install "homeassistant>=2026.11,<2026.12"
+      - run: python -c "import custom_components.bonbon as m; print(m.__name__)"
