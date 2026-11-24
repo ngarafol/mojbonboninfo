@@ -17,3 +17,4 @@ preview.png
 .dev/
 .har/
 .deploy/
+.ci/
